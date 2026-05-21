@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBT OSN Matematika SD 2024</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a56db;
+    --primary-dark: #1140a0;
+    --secondary: #f59e0b;
+    --accent: #10b981;
+    --danger: #ef4444;
+    --bg: #f0f4ff;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    position: relative;
+  }
+  /* WATERMARK */
+  body::before {
+    content: "SITI SUNDARI";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+    font-size: 80px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    color: rgba(26, 86, 219, 0.06);
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 9999;
+    letter-spacing: 8px;
+  }
+  .watermark-corner {
+    position: fixed;
+    bottom: 14px;
+    right: 18px;
+    font-size: 12px;
+    color: rgba(26,86,219,0.25);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* SCREENS */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1a56db 0%, #1e40af 100%);
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(26,86,219,0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-title { font-family: 'Nunito', sans-serif; font-size: 18px; font-weight: 800; }
+  .header-sub { font-size: 12px; opacity: 0.8; }
+  .timer-box {
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 8px 16px;
+    text-align: center;
+    min-width: 100px;
+  }
+  .timer-label { font-size: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
+  .timer-value { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 2px; }
+  .timer-value.warning { color: #fbbf24; animation: pulse 1s infinite; }
+  .timer-value.danger { color: #f87171; animation: pulse 0.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+  /* WELCOME SCREEN */
+  #screen-welcome {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 24px;
+  }
+  .welcome-card {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 40px 36px;
+    box-shadow: 0 10px 40px rgba(26,86,219,0.12);
+    text-align: center;
+  }
+  .logo-badge {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg,#1a56db,#7c3aed);
+    border-radius: 20px;
+    margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    box-shadow: 0 8px 20px rgba(26,86,219,0.35);
+  }
+  .welcome-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 26px; font-weight: 900;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+  .welcome-sub { color: var(--muted); font-size: 14px; margin-bottom: 30px; }
+  .form-group { margin-bottom: 18px; text-align: left; }
+  .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .form-input, .form-select {
+    width: 100%; padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    background: #f8faff;
+  }
+  .form-input:focus, .form-select:focus { border-color: var(--primary); background: #fff; }
+
+  /* EXAM SELECT */
+  .exam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .exam-card {
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    background: #f8faff;
+  }
+  .exam-card:hover { border-color: var(--primary); background: #eef3ff; }
+  .exam-card.selected { border-color: var(--primary); background: #eef3ff; box-shadow: 0 0 0 3px rgba(26,86,219,0.15); }
+  .exam-card .exam-icon { font-size: 28px; margin-bottom: 6px; }
+  .exam-card .exam-name { font-size: 12px; font-weight: 700; color: var(--primary); }
+  .exam-card .exam-count { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .exam-card .exam-dur { font-size: 11px; color: var(--accent); font-weight: 600; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 13px 28px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    gap: 8px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), #3b82f6);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(26,86,219,0.35);
+    width: 100%;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(26,86,219,0.45); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .btn-secondary {
+    background: var(--bg);
+    color: var(--primary);
+    border: 2px solid var(--primary);
+  }
+  .btn-sm { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+
+  /* QUIZ SCREEN */
+  #screen-quiz { max-width: 800px; margin: 0 auto; padding: 24px; }
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.3);
+    border-radius: 99px; height: 6px; flex: 1; overflow: hidden;
+  }
+  .progress-bar-fill { height: 100%; background: #fff; border-radius: 99px; transition: width 0.4s; }
+
+  .question-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 30px 28px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    margin-bottom: 16px;
+  }
+  .question-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .q-badge {
+    background: var(--primary);
+    color: #fff;
+    font-size: 12px; font-weight: 700;
+    padding: 4px 12px; border-radius: 99px;
+  }
+  .q-topic {
+    font-size: 12px; color: var(--muted);
+    background: var(--bg); border-radius: 99px; padding: 4px 10px;
+  }
+  .question-text {
+    font-size: 16px; line-height: 1.7;
+    color: var(--text); margin-bottom: 18px;
+  }
+  .question-text .math { font-style: italic; font-weight: 600; color: var(--primary-dark); }
+  .stimulus-img {
+    max-width: 100%; border-radius: 12px;
+    border: 2px solid var(--border);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  /* SVG Stimulus */
+  .stimulus-svg {
+    margin-bottom: 16px;
+    overflow: visible;
+  }
+
+  /* OPTIONS */
+  .options-list { display: flex; flex-direction: column; gap: 10px; }
+  .option-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.18s;
+    background: #fafbff;
+    font-size: 15px;
+  }
+  .option-item:hover { border-color: var(--primary); background: #eef3ff; }
+  .option-item.selected { border-color: var(--primary); background: #eef3ff; }
+  .option-item.correct { border-color: var(--accent); background: #ecfdf5; }
+  .option-item.wrong { border-color: var(--danger); background: #fef2f2; }
+  .option-letter {
+    width: 34px; height: 34px; flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px; color: var(--primary);
+    transition: all 0.18s;
+  }
+  .option-item.selected .option-letter { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .option-item.correct .option-letter { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .option-item.wrong .option-letter { background: var(--danger); border-color: var(--danger); color: #fff; }
+
+  /* NAVIGATION */
+  .nav-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 16px; gap: 12px;
+  }
+  .nav-dots {
+    display: flex; flex-wrap: wrap; gap: 6px; flex: 1;
+    justify-content: center;
+  }
+  .nav-dot {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    background: #fff;
+    font-size: 11px; font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .nav-dot.answered { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .nav-dot.active { border-color: var(--secondary); color: var(--secondary); box-shadow: 0 0 0 2px rgba(245,158,11,0.3); }
+  .nav-dot.answered.active { background: var(--secondary); border-color: var(--secondary); color: #fff; }
+
+  /* RESULTS SCREEN */
+  #screen-result { max-width: 700px; margin: 40px auto; padding: 24px; }
+  .result-card {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 40px 36px;
+    box-shadow: 0 10px 40px rgba(26,86,219,0.12);
+    text-align: center;
+  }
+  .score-circle {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-family: 'Nunito', sans-serif;
+    position: relative;
+  }
+  .score-circle::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 10px solid var(--border);
+  }
+  .score-circle-fill {
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 10px solid transparent;
+  }
+  .score-number { font-size: 44px; font-weight: 900; line-height: 1; z-index: 1; }
+  .score-label { font-size: 13px; color: var(--muted); z-index: 1; }
+  .result-name { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .result-exam { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+  .stats-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-bottom: 24px;
+  }
+  .stat-box {
+    background: var(--bg);
+    border-radius: 14px; padding: 16px 10px;
+  }
+  .stat-val { font-family: 'Nunito', sans-serif; font-size: 26px; font-weight: 900; }
+  .stat-lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .stat-box.correct .stat-val { color: var(--accent); }
+  .stat-box.wrong .stat-val { color: var(--danger); }
+  .stat-box.skip .stat-val { color: var(--muted); }
+
+  .feedback-box {
+    border-radius: 16px; padding: 18px 20px;
+    text-align: left; margin-bottom: 20px;
+    font-size: 14px; line-height: 1.6;
+  }
+  .feedback-box.excellent { background: #ecfdf5; border-left: 4px solid var(--accent); }
+  .feedback-box.good { background: #eff6ff; border-left: 4px solid var(--primary); }
+  .feedback-box.average { background: #fffbeb; border-left: 4px solid var(--secondary); }
+  .feedback-box.poor { background: #fef2f2; border-left: 4px solid var(--danger); }
+  .feedback-title { font-weight: 700; font-size: 16px; margin-bottom: 8px; }
+
+  .review-section { margin-top: 24px; text-align: left; }
+  .review-title { font-weight: 700; font-size: 16px; margin-bottom: 14px; color: var(--text); }
+  .review-item {
+    padding: 14px 16px; border-radius: 12px; margin-bottom: 8px;
+    border: 2px solid var(--border); background: #fafbff;
+    font-size: 13px;
+  }
+  .review-item.correct-review { border-color: var(--accent); background: #f0fdf4; }
+  .review-item.wrong-review { border-color: var(--danger); background: #fff5f5; }
+  .review-item.skip-review { border-color: var(--border); background: #f8fafc; }
+  .review-q { font-weight: 600; margin-bottom: 4px; }
+  .review-ans { font-size: 12px; color: var(--muted); }
+  .review-correct-ans { color: var(--accent); font-weight: 600; }
+  .review-wrong-ans { color: var(--danger); }
+
+  .btn-row { display: flex; gap: 12px; margin-top: 20px; }
+  .btn-row .btn { flex: 1; }
+
+  /* INSTRUCTION SCREEN */
+  #screen-instruction { max-width: 600px; margin: 40px auto; padding: 24px; }
+  .instruction-card {
+    background: var(--card); border-radius: 24px;
+    padding: 36px 32px; box-shadow: 0 10px 40px rgba(26,86,219,0.12);
+  }
+  .instruction-title { font-family: 'Nunito', sans-serif; font-size: 22px; font-weight: 900; color: var(--primary); margin-bottom: 16px; }
+  .instruction-list { list-style: none; }
+  .instruction-list li {
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    display: flex; gap: 12px; align-items: flex-start;
+    font-size: 14px; line-height: 1.6;
+  }
+  .instruction-list li:last-child { border-bottom: none; }
+  .inst-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .info-row {
+    display: flex; gap: 12px; margin: 20px 0;
+  }
+  .info-chip {
+    background: var(--bg); border-radius: 99px;
+    padding: 8px 16px; font-size: 13px; font-weight: 600;
+    color: var(--primary); display: flex; align-items: center; gap: 6px;
+  }
+
+  /* TABLE */
+  table.q-table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 12px 0; }
+  table.q-table th { background: var(--primary); color: #fff; padding: 8px 10px; text-align: center; }
+  table.q-table td { padding: 7px 10px; border: 1px solid var(--border); text-align: center; }
+  table.q-table tr:nth-child(even) td { background: var(--bg); }
+
+  .text-input-answer {
+    width: 100%; padding: 12px 16px;
+    border: 2px solid var(--border); border-radius: 12px;
+    font-size: 16px; font-family: 'Poppins', sans-serif;
+    outline: none; transition: border-color 0.2s;
+    margin-top: 8px;
+  }
+  .text-input-answer:focus { border-color: var(--primary); }
+
+  /* FRACTION */
+  .frac { display: inline-block; vertical-align: middle; text-align: center; }
+  .frac > span { display: block; line-height: 1.2; }
+  .frac > span:first-child { border-bottom: 1.5px solid currentColor; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .exam-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(3, 1fr); }
+    .header-title { font-size: 15px; }
+    .question-text { font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="watermark-corner">SITI SUNDARI</div>
+
+<!-- WELCOME SCREEN -->
+<div id="screen-welcome" class="screen active">
+  <div style="text-align:center; padding: 20px 24px 0;">
+    <div style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:700; color:#1a56db; letter-spacing:2px; text-transform:uppercase; opacity:0.7;">Computer Based Test</div>
+    <div style="font-family:'Nunito',sans-serif; font-size:28px; font-weight:900; color:#1e293b; margin-top:4px;">OSN Matematika SD</div>
+    <div style="font-size:14px; color:#64748b;">Olimpiade Sains Nasional 2024</div>
+  </div>
+  <div class="welcome-card" style="margin-top:20px;">
+    <div class="logo-badge">🧮</div>
+    <div class="welcome-title">Selamat Datang!</div>
+    <div class="welcome-sub">Silakan isi data diri dan pilih paket soal</div>
+
+    <div class="form-group">
+      <label class="form-label">👤 Nama Lengkap</label>
+      <input type="text" id="input-name" class="form-input" placeholder="Masukkan nama lengkap..." autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">🏫 Kelas</label>
+      <select id="input-class" class="form-select">
+        <option value="">-- Pilih Kelas --</option>
+        <option value="3">Kelas 3</option>
+        <option value="4">Kelas 4</option>
+        <option value="5">Kelas 5</option>
+        <option value="6">Kelas 6</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">📋 Pilih Paket Soal</label>
+      <div class="exam-grid">
+        <div class="exam-card" onclick="selectExam(0)" id="exam-0">
+          <div class="exam-icon">🏘️</div>
+          <div class="exam-name">Tingkat Kabupaten</div>
+          <div class="exam-count">30 Soal Pilihan Ganda</div>
+          <div class="exam-dur">⏱ 60 menit</div>
+        </div>
+        <div class="exam-card" onclick="selectExam(1)" id="exam-1">
+          <div class="exam-icon">🏙️</div>
+          <div class="exam-name">Tingkat Provinsi</div>
+          <div class="exam-count">20 Soal Isian</div>
+          <div class="exam-dur">⏱ 60 menit</div>
+        </div>
+        <div class="exam-card" onclick="selectExam(2)" id="exam-2">
+          <div class="exam-icon">🥇</div>
+          <div class="exam-name">Nasional – Teori I</div>
+          <div class="exam-count">25 Soal Isian Singkat</div>
+          <div class="exam-dur">⏱ 60 menit</div>
+        </div>
+        <div class="exam-card" onclick="selectExam(3)" id="exam-3">
+          <div class="exam-icon">📝</div>
+          <div class="exam-name">Nasional – Teori II</div>
+          <div class="exam-count">13 Soal Uraian</div>
+          <div class="exam-dur">⏱ 90 menit</div>
+        </div>
+        <div class="exam-card" onclick="selectExam(4)" id="exam-4" style="grid-column:span 2;">
+          <div class="exam-icon">🔭</div>
+          <div class="exam-name">Nasional – Eksplorasi</div>
+          <div class="exam-count">6 Soal Eksplorasi</div>
+          <div class="exam-dur">⏱ 120 menit</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="goToInstruction()" id="btn-start">
+      Lanjut ke Petunjuk →
+    </button>
+  </div>
+</div>
+
+<!-- INSTRUCTION SCREEN -->
+<div id="screen-instruction" class="screen">
+  <div class="instruction-card">
+    <div class="instruction-title">📋 Petunjuk Pengerjaan</div>
+    <div class="info-row" id="instr-info"></div>
+    <ul class="instruction-list">
+      <li><span class="inst-icon">📌</span><span>Baca setiap soal dengan cermat sebelum menjawab.</span></li>
+      <li><span class="inst-icon">⏱</span><span>Waktu pengerjaan berjalan otomatis. Ujian akan otomatis dikumpulkan saat waktu habis.</span></li>
+      <li><span class="inst-icon">💡</span><span>Pilih jawaban yang paling tepat. Kamu bisa berpindah soal kapan saja menggunakan tombol navigasi.</span></li>
+      <li><span class="inst-icon">✅</span><span>Pastikan semua soal sudah terjawab sebelum mengklik "Selesai & Kumpulkan".</span></li>
+      <li><span class="inst-icon">🚫</span><span>Dilarang menggunakan kalkulator atau alat bantu hitung lainnya.</span></li>
+      <li><span class="inst-icon">📊</span><span>Nilai dan umpan balik akan ditampilkan setelah ujian selesai.</span></li>
+    </ul>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="showScreen('screen-welcome')">← Kembali</button>
+      <button class="btn btn-primary" onclick="startExam()">Mulai Ujian 🚀</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="screen-quiz" class="screen">
+  <div class="header" id="quiz-header" style="margin-bottom:0;">
+    <div>
+      <div class="header-title" id="hdr-title">OSN Matematika SD</div>
+      <div class="header-sub" id="hdr-sub">Tingkat Kabupaten 2024</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="text-align:right;display:none;" id="hdr-name-box">
+        <div style="font-size:11px;opacity:.7;">Peserta</div>
+        <div style="font-size:13px;font-weight:700;" id="hdr-name"></div>
+      </div>
+      <div class="timer-box">
+        <div class="timer-label">Waktu</div>
+        <div class="timer-value" id="timer-display">60:00</div>
+      </div>
+    </div>
+  </div>
+  <!-- Progress -->
+  <div style="background:var(--primary);padding:8px 24px 12px;display:flex;align-items:center;gap:12px;margin-bottom:0;">
+    <div style="font-size:12px;color:rgba(255,255,255,.8);white-space:nowrap;" id="progress-text">1 / 30</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill" style="width:3%"></div>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.8);white-space:nowrap;" id="answered-text">0 terjawab</div>
+  </div>
+
+  <div style="max-width:800px;margin:0 auto;padding:20px 16px;">
+    <div class="question-card" id="question-card">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- Nav dots -->
+    <div class="nav-dots" id="nav-dots" style="margin-bottom:14px;"></div>
+
+    <!-- Navigation buttons -->
+    <div class="nav-row">
+      <button class="btn btn-secondary btn-sm" onclick="prevQuestion()" id="btn-prev">← Prev</button>
+      <button class="btn btn-primary btn-sm" onclick="nextQuestion()" id="btn-next">Next →</button>
+    </div>
+    <div style="text-align:center; margin-top:14px;">
+      <button class="btn" onclick="confirmSubmit()" style="background:#ef4444;color:#fff;padding:10px 28px;font-size:14px;border-radius:12px;box-shadow:0 4px 14px rgba(239,68,68,.3);">
+        ✔ Selesai & Kumpulkan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="screen-result" class="screen">
+  <div class="result-card">
+    <div class="score-circle" id="score-circle">
+      <div class="score-number" id="score-number">0</div>
+      <div class="score-label">Nilai</div>
+    </div>
+    <div class="result-name" id="result-name"></div>
+    <div class="result-exam" id="result-exam"></div>
+    <div class="stats-row">
+      <div class="stat-box correct">
+        <div class="stat-val" id="stat-correct">0</div>
+        <div class="stat-lbl">✅ Benar</div>
+      </div>
+      <div class="stat-box wrong">
+        <div class="stat-val" id="stat-wrong">0</div>
+        <div class="stat-lbl">❌ Salah</div>
+      </div>
+      <div class="stat-box skip">
+        <div class="stat-val" id="stat-skip">0</div>
+        <div class="stat-lbl">⬜ Kosong</div>
+      </div>
+    </div>
+    <div class="feedback-box" id="feedback-box">
+      <div class="feedback-title" id="feedback-title"></div>
+      <div id="feedback-text"></div>
+    </div>
+    <div class="review-section">
+      <div class="review-title">📖 Kunci Jawaban & Pembahasan</div>
+      <div id="review-list"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="restartExam()">🔄 Ulangi</button>
+      <button class="btn btn-primary" onclick="showScreen('screen-welcome')">🏠 Menu Utama</button>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM MODAL -->
+<div id="custom-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:99999; align-items:center; justify-content:center; padding:20px;">
+  <div style="background:#fff; border-radius:20px; padding:32px 28px; max-width:380px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.25);">
+    <div style="font-size:36px; margin-bottom:12px;">📋</div>
+    <div style="font-family:'Nunito',sans-serif; font-size:18px; font-weight:800; color:#1e293b; margin-bottom:8px;">Konfirmasi</div>
+    <div id="modal-message" style="font-size:14px; color:#64748b; line-height:1.6; margin-bottom:24px;"></div>
+    <div style="display:flex; gap:12px;">
+      <button id="modal-cancel" style="flex:1; padding:12px; border-radius:12px; border:2px solid #e2e8f0; background:#f8faff; font-size:14px; font-weight:700; font-family:'Poppins',sans-serif; cursor:pointer; color:#64748b;">Batal</button>
+      <button id="modal-confirm" style="flex:1; padding:12px; border-radius:12px; border:none; background:linear-gradient(135deg,#1a56db,#3b82f6); color:#fff; font-size:14px; font-weight:700; font-family:'Poppins',sans-serif; cursor:pointer; box-shadow:0 4px 14px rgba(26,86,219,0.35);">Ya, Kumpulkan ✔</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================================================
+// QUESTION DATA
+// ===================================================
+const EXAMS = [
+
+// ===================== EXAM 0: KABUPATEN =====================
+{
+  title: "Tingkat Kabupaten",
+  subtitle: "OSN Matematika SD – Tingkat Kabupaten 2024",
+  duration: 60,
+  type: "multiple",
+  questions: [
+    {
+      id:1, topic:"Pola & Barisan",
+      text: "Susi mengurutkan bilangan asli terkecil ke terbesar kelipatan 2 dan Wati mengurutkan bilangan asli terkecil ke terbesar kelipatan 3. Jumlah bilangan Susi urutan ke-25 dan bilangan Wati urutan ke-20 adalah ….",
+      options:["100","110","115","125"], answer:3
+    },
+    {
+      id:2, topic:"Pola",
+      text: "Diketahui suatu pola berikut ini: ■ ♦ ♦ ● ▲ ▲ ▲ ■ ♦ ♦ ● ▲ ▲ ▲ …\nGambar yang akan tampak pada urutan ke-100 adalah ….",
+      options:["■","♦","●","▲"], answer:3
+    },
+    {
+      id:3, topic:"Aljabar",
+      text: "Bilangan ratusan x dan y dimana x = apc dan y = aqc memenuhi sifat-sifat x – y = 50 dan p + q = 11. Hasil dari p × q = ….",
+      options:["24","28","30","50"], answer:1
+    },
+    {
+      id:4, topic:"Bilangan Prima",
+      text: "Andi mengurutkan bilangan bulat yang bukan prima atau bukan kelipatan 5, dimulai dari besar ke kecil. Jika urutan ke-10 bilangan yang dituliskan oleh Andi adalah 102, maka urutan ke-21 adalah ….",
+      options:["83","84","86","87"], answer:2
+    },
+    {
+      id:5, topic:"Pecahan",
+      text: "Jika ¼ × (1/q) − ¼ − (1/q) = 13/2, maka nilai q adalah ….",
+      options:["−9","−1/9","1/9","9"], answer:0
+    },
+    {
+      id:6, topic:"Aljabar",
+      text: "Jika a dan b bilangan bulat positif yang memenuhi a² − b² = 6³, maka nilai berikut yang BUKAN merupakan hasil dari a × b adalah ….",
+      options:["45","135","315","2915"], answer:3
+    },
+    {
+      id:7, topic:"Barisan Bilangan",
+      text: "Tiga bilangan x, y, z merupakan tiga bilangan kelipatan n berurutan. Jumlah tiga bilangan tersebut adalah 27 dan perkalian bilangan terkecil dan terbesarnya adalah 72. Selisih bilangan terbesar dan terkecil adalah ….",
+      options:["2","4","6","8"], answer:1
+    },
+    {
+      id:8, topic:"Usia",
+      text: "Diketahui tiga orang sahabat, yaitu Ani, Budi dan Corry. Diantara ketiganya, Ani paling muda dan Corry paling tua. Usia Ani dan Budi berselisih 1 tahun, sedangkan usia Budi dan Corry berselisih 2 tahun. Empat tahun kemudian jumlah usia mereka 76 tahun. Jumlah usia Ani dan Corry saat ini adalah … tahun.",
+      options:["41","42","43","45"], answer:2
+    },
+    {
+      id:9, topic:"Keuntungan",
+      text: "Pak Joni membeli 13 kg keripik pisang seharga Rp650.000. Keripik pisang dijual kembali dengan harga Rp15.000 per 250 gram. Keuntungan maksimum yang akan diperoleh Pak Joni adalah ….",
+      options:["Rp100.000","Rp130.000","Rp150.000","Rp180.000"], answer:2
+    },
+    {
+      id:10, topic:"Poin & Strategi",
+      text: "Naomi, Tori, dan Eksa sedang memainkan suatu permainan dalam 10 babak. Juara ke-1, ke-2, dan ke-3 pada setiap babak akan mendapatkan poin berturut-turut sebesar 5 poin, 3 poin, dan 0 poin. Dari seluruh babak, Naomi memperoleh total poin 28. Berapa kali paling sedikit Naomi menjadi juara ke-3 dari seluruh babak permainan?",
+      options:["4 kali","3 kali","2 kali","1 kali"], answer:2
+    },
+    {
+      id:11, topic:"Operasi Bilangan",
+      text: "Hasil operasi dari ((0,4)⁶ × 25³) + ((0,5)⁴ × 16³) adalah ….",
+      options:["320","312","296","272"], answer:0
+    },
+    {
+      id:12, topic:"Pecahan",
+      text: "Diketahui ¾ + 7/253 = a/2024. Nilai a = ….",
+      options:["787","1012","1574","1724"], answer:2
+    },
+    {
+      id:13, topic:"Operasi Bilangan",
+      text: "Azizah akan mengoperasikan suatu bilangan dengan operasi-operasi berikut: ditambah 2, dibagi 6, dibagi 5, dikurang 3 dan dikali 2.\n\nJika Azizah mengoperasikan bilangan 122 dan hasil operasi terakhir yang diinginkan adalah 1, maka banyaknya operasi yang paling sedikit dilakukan oleh Azizah adalah … operasi.",
+      options:["enam","tujuh","sembilan","sepuluh"], answer:1
+    },
+    {
+      id:14, topic:"Geometri Ruang",
+      text: "Andika akan membuat kotak donasi. Jaring-jaring kotak donasi berbentuk seperti: satu sisi atas kecil (pink), sisi depan besar bertulisan 'Kotak Donasi', sisi samping kanan kecil (abu), dan satu sisi besar kosong di kanan. Kotak donasi yang terbentuk adalah kotak dengan sisi 'Kotak Donasi' di depan dan sisi kuning di kanan.",
+      options:["Kotak dengan sisi kuning di kanan","Kotak dengan teks terbalik di atas","Kotak dengan sisi kuning di kiri (teks di depan)","Kotak dengan sisi abu di depan"], answer:2
+    },
+    {
+      id:15, topic:"Limas",
+      text: "Limas E.ABCD memiliki alas persegi panjang dengan ukuran CD = 6 cm, AD = 8 cm dan rusuk-rusuk tegaknya 13 cm. Luas segitiga BDE = … cm².",
+      options:["24","30","48","60"], answer:3
+    },
+    {
+      id:16, topic:"Keliling & Luas",
+      text: "Jumlah keliling suatu persegi dan suatu persegi panjang sama dengan tiga kali keliling suatu segitiga sama sisi. Diketahui panjang sisi persegi dan segitiga sama sisi berturut-turut adalah 12 cm dan 10 cm. Jika lebar persegi panjang adalah 9 cm, maka perbandingan lebar dan panjang dari persegi panjang adalah ….",
+      options:["2:3","1:2","1:4","3:4"], answer:0
+    },
+    {
+      id:17, topic:"Segitiga",
+      text: "Perhatikan gambar segitiga sama kaki ABC dengan AB = AC = 5, BC = 8, dan tinggi BC adalah 3. Titik D berada pada garis AB. Panjang t (DC) adalah … satuan panjang.",
+      options:["15/8","24/5","40/3","120"], answer:1
+    },
+    {
+      id:18, topic:"Tabung",
+      text: "Tabung A memiliki jari-jari sama dengan tingginya, sedangkan tabung B memiliki jari-jari sama dengan ¾ tingginya. Jika jari-jari tabung A sama dengan dua kali jari-jari tabung B, maka perbandingan luas selimut tabung A dan tabung B adalah ….",
+      options:["2:1","3:1","4:3","3:2"], answer:3
+    },
+    {
+      id:19, topic:"Luas Daerah",
+      text: "ABCD adalah persegi panjang (AB=4cm, AD=4cm) dan BEFG adalah persegi (sisi=6cm). Jika perbandingan HB : BE = 1 : 3, maka luas daerah yang diarsir adalah … cm².",
+      options:["28","33","38","42"], answer:1
+    },
+    {
+      id:20, topic:"Statistik",
+      text: "Hasil ujian matematika di suatu kelas yang terdiri dari 20 siswa berada pada interval 56 – 100. Rata-rata seluruh siswa di kelas tersebut adalah 68. Sebanyak 3 siswa mengikuti remedial dengan nilai maksimum 75. Rata-rata tertinggi setelah remedial yang mungkin untuk kelas tersebut adalah ….",
+      options:["70,65","70,75","70,85","70,95"], answer:3
+    },
+    {
+      id:21, topic:"Statistik",
+      text: "Data banyak penjualan roti A, B, C, D, E dan F dalam dua hari berturut-turut: A(12,8), B(24,18), C(15,10), D(19,13), E(16,20), F(18,8). Grafik rata-rata banyak penjualan keenam roti tersebut yang benar adalah ….",
+      options:["Grafik A (A≈10, B≈21, C≈12, D≈16, E≈18, F≈13)","Grafik B (A≈10, B≈21, C≈12, D≈16, E≈18, F≈13) skala berbeda","Grafik C","Grafik D"], answer:0
+    },
+    {
+      id:22, topic:"Kecepatan & Waktu",
+      text: "Tim A: pelari ke-1 = 10 m/mnt, ke-2 = 10 m/mnt, ke-3 = 15 m/mnt, ke-4 = 25 m/mnt. Tim B: 12,5 m/mnt, 8 m/mnt, 20 m/mnt, 20 m/mnt. Setiap pelari menempuh 100 m. Selisih waktu tempuh kedua tim adalah … detik.",
+      options:["11","10","9","8"], answer:3
+    },
+    {
+      id:23, topic:"Kecepatan",
+      text: "Pada Chicago Marathon 2023, Kelvin Kiptum menyelesaikan jarak 42 km dengan waktu 2:00:35. Kecepatan rata-rata Kelvin Kiptum pada lomba tersebut mendekati … meter/detik.",
+      options:["5","6","7","8"], answer:1
+    },
+    {
+      id:24, topic:"Statistik",
+      text: "Berikut adalah tabel perolehan hasil tes IPA (banyak jawaban benar 0–10, banyak siswa 1,2,3,2,3,6,8,4,8,5,8). Berapa minimal banyak jawaban benar sehingga banyak jawaban benar tersebut melebihi 70% siswa yang lain?",
+      options:["7","8","9","10"], answer:1
+    },
+    {
+      id:25, topic:"Panjat Pinang",
+      text: "Jimmy memanjat sejauh 2/5 dari tinggi batang pinang, kemudian merosot ke posisi ¼ dari posisi sebelumnya. Selanjutnya, Jimmy memanjat kembali tepat 1/5 dari posisi terakhir. Jika Jimmy harus memanjat 6 meter lagi untuk sampai di puncak, maka tinggi batang pinang adalah … meter.",
+      options:["9,125","9,375","9,500","9,750"], answer:1
+    },
+    {
+      id:26, topic:"Tahun & Digit",
+      text: "Bilangan penyusun dari tahun 2024 yaitu 2, 0, 2 dan 4, bila dijumlahkan hasilnya adalah 8. Berapa banyak tahun yang memiliki sifat tersebut seabad setelah 2040?",
+      options:["6","7","8","9"], answer:2
+    },
+    {
+      id:27, topic:"Kombinatorika",
+      text: "Berapa banyak bilangan ganjil sembilan angka abcdefghi berbeda yang tersusun dari angka-angka 1,2,3,4,5,6,7,8 dan 9 sehingga d+e+f = 10?",
+      options:["2160","4320","6480","8640"], answer:1
+    },
+    {
+      id:28, topic:"Kombinatorika",
+      text: "Bilangan ratusan abc disusun dari angka-angka yang berbeda 1, 2, 3, 4, 5, dan 6. Jika b merupakan bilangan genap dan a < c, maka banyak bilangan ratusan yang mungkin adalah … bilangan.",
+      options:["16","20","30","32"], answer:2
+    },
+    {
+      id:29, topic:"Kombinatorika",
+      text: "Terdapat 3 untai balon (masing-masing berisi 3, 3, dan 3 balon bernomor 1–9). Setiap balon diledakkan dengan syarat tidak boleh menjatuhkan balon lain, dan untuk meledakkan balon berikutnya harus berbeda untaian. Banyak cara agar balon nomor 6 diledakkan pada urutan ke-lima adalah ….",
+      options:["6","5","4","3"], answer:0
+    },
+    {
+      id:30, topic:"Kombinatorika",
+      text: "Panitia pentas seni membutuhkan 2 orang bagian perlengkapan dan 2 orang bagian sekretariat. Jika terdapat 3 calon anggota bagian perlengkapan dan 4 calon anggota bagian sekretariat, maka banyak susunan anggota berbeda yang dapat dipilih adalah ….",
+      options:["9","18","36","72"], answer:1
+    }
+  ]
+},
+
+// ===================== EXAM 1: PROVINSI =====================
+{
+  title: "Tingkat Provinsi",
+  subtitle: "OSN Matematika SD – Tingkat Provinsi 2024",
+  duration: 60,
+  type: "multiple",
+  questions: [
+    {
+      id:1, topic:"Faktor Bilangan",
+      text: "Jika 3ⁿ adalah faktor dari 18¹⁰, maka bilangan bulat terbesar n yang mungkin adalah ….",
+      options:["10","20","21","22"], answer:1
+    },
+    {
+      id:2, topic:"FPB",
+      text: "Diketahui Faktor Persekutuan Terbesar dari a dan 2024 serta a dan 2025 terletak antara 10 dan 20. Nilai a terkecil yang mungkin adalah ….",
+      options:["11","13","143","169"], answer:2
+    },
+    {
+      id:3, topic:"Bilangan Kuadrat",
+      text: "Bilangan 2024 dapat dinyatakan sebagai jumlah dari n bilangan kuadrat berbeda. Nilai n terbesar yang mungkin adalah ….",
+      options:["5","6","7","8"], answer:2
+    },
+    {
+      id:4, topic:"Keterbagian",
+      text: "Jika bilangan lima digit a679b habis dibagi 72, maka bilangan tersebut adalah ….",
+      options:["16792","26792","36792","46792"], answer:1
+    },
+    {
+      id:5, topic:"Luas Bangun",
+      text: "Sebelas (11) persegi panjang kecil ukuran sama ditempel pada kertas berbentuk persegi panjang dengan ukuran 10×15 seperti tampak pada gambar. Luas daerah persegi panjang yang tidak ditempel adalah ….",
+      options:["10","14","16","20"], answer:1,
+      stimulus: `<svg class="stimulus-svg" viewBox="0 0 220 180" width="220" height="180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="10" width="200" height="160" rx="4" fill="#f8faff" stroke="#1a56db" stroke-width="2"/>
+        <text x="110" y="6" text-anchor="middle" font-size="10" fill="#1a56db">10 cm</text>
+        <text x="5" y="92" text-anchor="middle" font-size="10" fill="#1a56db" transform="rotate(-90,5,92)">15 cm</text>
+        <!-- 2 columns on left, each 50w x 40h, 2 rows high = 4 rectangles left top area -->
+        <!-- Simulate 11 rectangles arranged per diagram -->
+        <!-- Left column: 3 tall rectangles -->
+        <rect x="15" y="15" width="90" height="72" rx="2" fill="#d1d5db" stroke="#6b7280" stroke-width="1"/>
+        <rect x="15" y="89" width="90" height="76" rx="2" fill="#d1d5db" stroke="#6b7280" stroke-width="1"/>
+        <!-- Right column: top 2 -->
+        <rect x="110" y="15" width="95" height="52" rx="2" fill="#d1d5db" stroke="#6b7280" stroke-width="1"/>
+        <rect x="110" y="69" width="95" height="52" rx="2" fill="#d1d5db" stroke="#6b7280" stroke-width="1"/>
+        <!-- bottom right: white (uncovered) -->
+        <rect x="110" y="123" width="95" height="42" rx="2" fill="#fff" stroke="#1a56db" stroke-width="1.5" stroke-dasharray="4,2"/>
+        <!-- bottom left more rects -->
+        <line x1="15" y1="55" x2="105" y2="55" stroke="#6b7280" stroke-width="1"/>
+        <line x1="60" y1="15" x2="60" y2="87" stroke="#6b7280" stroke-width="1"/>
+        <line x1="60" y1="89" x2="60" y2="165" stroke="#6b7280" stroke-width="1"/>
+        <line x1="110" y1="95" x2="205" y2="95" stroke="#6b7280" stroke-width="1"/>
+        <text x="152" y="140" text-anchor="middle" font-size="11" fill="#1a56db" font-weight="bold">?</text>
+      </svg>`
+    },
+    {
+      id:6, topic:"Lingkaran",
+      text: "Busur AB, BE, BD dan BC adalah setengah lingkaran dengan diameter 10 cm, maka luas daerah yang diarsir adalah ….",
+      options:["25π","50π","75π","100π"], answer:0,
+      stimulus: `<svg class="stimulus-svg" viewBox="0 0 240 220" width="240" height="220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#1a56db" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <!-- Diagram inspired by the 4-semicircle shape -->
+        <!-- Center point B at (120,110) -->
+        <!-- A(70,110), D(170,110), C(120,60), E(120,160) -->
+        <!-- Large outer arcs -->
+        <path d="M 70 110 A 50 50 0 0 1 120 60" fill="url(#hatch)" stroke="#1a56db" stroke-width="2"/>
+        <path d="M 120 60 A 50 50 0 0 1 170 110" fill="url(#hatch)" stroke="#1a56db" stroke-width="2"/>
+        <path d="M 70 110 A 50 50 0 0 0 120 160" fill="url(#hatch)" stroke="#1a56db" stroke-width="2"/>
+        <path d="M 120 160 A 50 50 0 0 0 170 110" fill="url(#hatch)" stroke="#1a56db" stroke-width="2"/>
+        <!-- Inner circles (removed/white) -->
+        <path d="M 70 110 A 25 25 0 0 1 120 110" fill="white" stroke="#1a56db" stroke-width="1.5"/>
+        <path d="M 120 110 A 25 25 0 0 1 170 110" fill="white" stroke="#1a56db" stroke-width="1.5"/>
+        <path d="M 95 110 A 25 25 0 0 0 120 85" fill="white" stroke="#1a56db" stroke-width="1.5"/>
+        <path d="M 120 85 A 25 25 0 0 0 145 110" fill="white" stroke="#1a56db" stroke-width="1.5"/>
+        <!-- Labels -->
+        <circle cx="70" cy="110" r="3" fill="#1a56db"/><text x="58" y="115" font-size="11" fill="#1a56db" font-weight="bold">A</text>
+        <circle cx="120" cy="110" r="3" fill="#1a56db"/><text x="112" y="107" font-size="11" fill="#1a56db" font-weight="bold">B</text>
+        <circle cx="170" cy="110" r="3" fill="#1a56db"/><text x="173" y="115" font-size="11" fill="#1a56db" font-weight="bold">D</text>
+        <circle cx="120" cy="60" r="3" fill="#1a56db"/><text x="125" y="62" font-size="11" fill="#1a56db" font-weight="bold">C</text>
+        <circle cx="120" cy="160" r="3" fill="#1a56db"/><text x="125" y="162" font-size="11" fill="#1a56db" font-weight="bold">E</text>
+        <text x="120" y="205" text-anchor="middle" font-size="10" fill="#64748b">diameter = 10 cm</text>
+      </svg>`
+    },
+    {
+      id:7, topic:"Segitiga",
+      text: "Perhatikan gambar. Jika diketahui luas segitiga ABC adalah 578 satuan luas (sudut ABC=90°, sudut ACB=45°, sudut ACD=30°), maka panjang AD adalah ... satuan panjang.",
+      options:["34","51","51√3","34+34√3"], answer:3,
+      stimulus: `<svg class="stimulus-svg" viewBox="0 0 260 140" width="260" height="140" xmlns="http://www.w3.org/2000/svg">
+        <line x1="20" y1="100" x2="200" y2="100" stroke="#333" stroke-width="2"/>
+        <line x1="20" y1="100" x2="90" y2="20" stroke="#333" stroke-width="2"/>
+        <line x1="90" y1="20" x2="200" y2="100" stroke="#1a56db" stroke-width="2"/>
+        <line x1="90" y1="20" x2="240" y2="100" stroke="#10b981" stroke-width="2"/>
+        <!-- right angle at B -->
+        <rect x="20" y="88" width="12" height="12" fill="none" stroke="#333" stroke-width="1.5"/>
+        <text x="75" y="108" font-size="11" fill="#1a56db" font-weight="bold">45°</text>
+        <text x="185" y="108" font-size="11" fill="#10b981" font-weight="bold">30°</text>
+        <text x="82" y="18" font-size="11" fill="#1a56db" font-weight="bold">A</text>
+        <text x="8" y="108" font-size="11" fill="#333" font-weight="bold">B</text>
+        <text x="190" y="108" font-size="11" fill="#333" font-weight="bold">C</text>
+        <text x="238" y="108" font-size="11" fill="#10b981" font-weight="bold">D</text>
+      </svg>`
+    },
+    {
+      id:8, topic:"Persegi Panjang",
+      text: "ABCD persegi panjang dengan luas 36. Jika BC = DQ, DP = CQ, dan luas ABCD : luas ABQP = 3:2, maka luas daerah ABQP adalah … cm².",
+      options:["18","20","24","27"], answer:2
+    },
+    {
+      id:9, topic:"Perbandingan Luas",
+      text: "Segitiga ABC siku-siku di B, perbandingan sisi AB:BC = 3:4. BQ tegak lurus AC. Perbandingan luas segitiga BCQ dan ABQ adalah ….",
+      options:["9:16","16:9","3:4","4:3"], answer:1
+    },
+    {
+      id:10, topic:"Jaring-jaring Kubus",
+      text: "Apabila jaring-jaring kubus (sisi atas-kiri=8, atas-kanan=9, tengah kiri=9, tengah tengah=9, tengah kanan=9, bawah=8) dibentuk menjadi kubus dan bilangan pada sisi yang saling berhadapan dijumlahkan, maka banyak pasangan bilangan yang jumlahnya sama adalah … pasang.",
+      options:["0","1","2","3"], answer:3
+    },
+    {
+      id:11, topic:"Bilangan",
+      text: "Let abc is a three digit number, both ab and bc are two digit numbers. If abc = 2 × (ab + bc), then abc is ….",
+      options:["198","288","396","495"], answer:0
+    },
+    {
+      id:12, topic:"Pembagian Uang",
+      text: "Pak Raden membagikan uang Rp7.995 juta kepada seorang istri, 5 orang putra dan 4 orang putri. Setiap anak laki-laki menerima tiga kali dari bagian anak perempuan, dan anak perempuan menerima dua kali dari bagian istri. Uang yang diterima istri Pak Raden sebesar … rupiah.",
+      options:["Rp285.000.000","Rp300.000.000","Rp315.000.000","Rp333.000.000"], answer:0
+    },
+    {
+      id:13, topic:"Persentase",
+      text: "Pak Adi memiliki tiga kantin. Keuntungan 5 hari: A(160+165+220+205+250)=1.000.000, C(264+156+186+234+360)=1.200.000, B(285+315+255+330+315)=1.500.000. Sabtu masing-masing kantin mendapat 25% dari 5 hari. Persentase keuntungan hari Sabtu dari total 6 hari adalah … %.",
+      options:["16,67","20,00","21,43","25,00"], answer:1
+    },
+    {
+      id:14, topic:"Kecepatan",
+      text: "Andi Rahman mengikuti lomba balap sepeda 5 etape: jarak 100, 145, a, 150, 130 km; kecepatan 40, 30, 25, 30, 40 km/jam; total waktu 1259 menit. Jarak etape ke tiga adalah … km.",
+      options:["75","100","125","150"], answer:1
+    },
+    {
+      id:15, topic:"Statistik",
+      text: "Persentase siswa yang memperoleh nilai 65(10%), 70(20%), 75(27,5%), 80(25%), 85(12,5%), 90(5%). Jika banyak peserta tes 80 siswa, selisih terkecil banyak siswa dengan nilai berdekatan adalah ….",
+      options:["1","2","3","4"], answer:2
+    },
+    {
+      id:16, topic:"Data",
+      text: "Data kependudukan Dusun Tenteram: tahun 2010 = 312 orang, tahun 2016 = 380 orang. Bila kecepatan pertambahan penduduk tetap, maka banyak penduduk Dusun Tenteram pada tahun 2025 adalah … orang.",
+      options:["432","450","483","500"], answer:2
+    },
+    {
+      id:17, topic:"Rata-rata",
+      text: "Diberikan empat buah bilangan a, b, c, dan d. Rata-rata a dan b adalah 50. Rata-rata b dan c adalah 3/2 dari rata-rata a dan b. Rata-rata c dan d adalah lima kurangnya dari rata-rata b dan c. Rata-rata a dan d adalah ….",
+      options:["55","60","65","70"], answer:2
+    },
+    {
+      id:18, topic:"Kombinatorika",
+      text: "Toko Kue Echo menjual 8 jenis Roti. Anita ingin membeli 5 roti dengan jenis berbeda. Jika Anita sudah menentukan 2 jenis roti yang akan dipilihnya, banyak kemungkinan roti yang dibeli Anita adalah ….",
+      options:["15","20","21","56"], answer:1
+    },
+    {
+      id:19, topic:"Kombinatorika",
+      text: "Tessi memilih lima bilangan berbeda dari 1, 2, 3, 4, 5, 6 dan 7 yang memenuhi: Jumlah kelima bilangan tersebut adalah ganjil dan Jumlah bilangan tersebut merupakan faktor dari hasil kali bilangan-bilangan yang dipilih. Banyak bilangan yang mungkin dipilih oleh Tessi adalah ….",
+      options:["4","6","8","10"], answer:1
+    },
+    {
+      id:20, topic:"Bilangan Prima",
+      text: "Bilangan a, b, dan c merupakan bilangan prima kurang dari 10. Bilangan-bilangan hasil perkalian a × b × c yang kelipatan 7 ada sebanyak ….",
+      options:["9","12","15","18"], answer:1
+    }
+  ]
+},
+
+// ===================== EXAM 2: NASIONAL TEORI I =====================
+{
+  title: "Nasional – Teori I",
+  subtitle: "OSN Matematika SD – Tes Teori I 2024",
+  duration: 60,
+  type: "multiple",
+  questions: [
+    {
+      id:1, topic:"Logika",
+      text: "Gida menuliskan bilangan 1, 2, 3, 4, 5, 6, 7, 8, dan 9 pada tiap-tiap lingkaran. Bilangan 1, 4, dan 5 sebagai patokan. Setiap jumlah dua bilangan pada lingkaran terdekat tidak habis dibagi 3, 5, dan 7. Bilangan x (di posisi bawah) adalah ….",
+      options:["3","6","8","9"], answer:2,
+      stimulus: `<svg class="stimulus-svg" viewBox="0 0 180 160" width="180" height="160" xmlns="http://www.w3.org/2000/svg">
+        <!-- Hexagonal arrangement of circles -->
+        <!-- Top: 1 -->
+        <circle cx="90" cy="25" r="18" fill="#1a56db" stroke="#fff" stroke-width="2"/>
+        <text x="90" y="30" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">1</text>
+        <!-- Top-left: empty, Top-right: empty -->
+        <circle cx="40" cy="70" r="18" fill="#1a56db" stroke="#fff" stroke-width="2"/>
+        <text x="40" y="75" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">4</text>
+        <circle cx="140" cy="70" r="18" fill="#1a56db" stroke="#fff" stroke-width="2"/>
+        <text x="140" y="75" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">5</text>
+        <!-- Between top circles -->
+        <circle cx="90" cy="70" r="18" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+        <text x="90" y="75" text-anchor="middle" font-size="12" fill="#64748b">?</text>
+        <!-- Bottom-left, bottom-right -->
+        <circle cx="40" cy="120" r="18" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+        <text x="40" y="125" text-anchor="middle" font-size="12" fill="#64748b">?</text>
+        <circle cx="140" cy="120" r="18" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+        <text x="140" y="125" text-anchor="middle" font-size="12" fill="#64748b">?</text>
+        <!-- Bottom (x) -->
+        <circle cx="90" cy="140" r="18" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+        <text x="90" y="145" text-anchor="middle" font-size="14" fill="#fff" font-weight="bold">x</text>
+      </svg>`
+    },
+    {
+      id:2, topic:"Segitiga",
+      text: "Perhatikan dua buah segitiga siku-siku: segitiga luar dengan tinggi 12 dan segitiga dalam dengan tinggi 4 dan alas 3, sisi miring 5. Jika perbandingan luas segitiga bagian dalam dan luar sebesar 1:5, maka panjang sisi a adalah … satuan panjang.",
+      options:["9","12","15","18"], answer:2,
+      stimulus: `<svg class="stimulus-svg" viewBox="0 0 200 180" width="200" height="180" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer triangle -->
+        <polygon points="40,160 40,20 160,160" fill="#dbeafe" stroke="#1a56db" stroke-width="2"/>
+        <!-- Inner triangle -->
+        <polygon points="40,160 40,120 80,160" fill="#bfdbfe" stroke="#1a56db" stroke-width="1.5"/>
+        <!-- Labels -->
+        <text x="28" y="90" font-size="12" fill="#1a56db" font-weight="bold">12</text>
+        <text x="42" y="145" font-size="11" fill="#374151">4</text>
+        <text x="58" y="168" font-size="11" fill="#374151">3</text>
+        <text x="50" y="138" font-size="11" fill="#1a56db">5</text>
+        <text x="105" y="175" font-size="12" fill="#ef4444" font-weight="bold">a</text>
+        <rect x="40" y="148" width="12" height="12" fill="none" stroke="#333" stroke-width="1.5"/>
+        <!-- Right angle at inner too -->
+        <rect x="40" y="108" width="10" height="10" fill="none" stroke="#333" stroke-width="1"/>
+      </svg>`
+    },
+    {
+      id:3, topic:"Rata-rata",
+      text: "Arhan rutin latihan basket 1 jam 15 menit selama 5 hari dan 1 jam 30 menit selama 3 hari. Rata-rata latihan Arhan selama 9 hari adalah 85 menit perhari. Lama waktu latihan Arhan pada hari ke sembilan adalah … menit.",
+      options:["80","85","90","100"], answer:2
+    },
+    {
+      id:4, topic:"Kombinatorika",
+      text: "Kejuaraan perebutan Piala Thomas 2024, Indonesia memiliki 6 pemain badminton spesialis ganda putra yaitu A, B, C, D, E dan F. Banyak tim ganda putra yang dapat dibentuk oleh Indonesia adalah ….",
+      options:["12","15","18","30"], answer:1
+    },
+    {
+      id:5, topic:"Pecahan",
+      text: "Let a and b are positive integers. If (23×a)/(5×b) = 20.24 then the smallest value of a + b is ….",
+      options:["27","28","29","30"], answer:3
+    },
+    {
+      id:6, topic:"KPK",
+      text: "Ani, Badu dan Jamil mengikuti latihan piano berturut-turut setiap 3, 4 dan 6 hari sekali. Jika mereka berlatih bersama-sama pada hari Senin, maka setelah itu mereka akan berlatih bersama-sama pertama kali pada hari ….",
+      options:["Selasa","Rabu","Kamis","Sabtu"], answer:2
+    },
+    {
+      id:7, topic:"Bilangan Prima",
+      text: "If p = 35 and q = 77, then the greatest prime factor of 17 × (6×p + 4×q) equals to ….",
+      options:["11","13","17","19"], answer:3
+    },
+    {
+      id:8, topic:"Layang-layang",
+      text: "Perhatikan layang-layang ABFC yang luasnya 100 cm². Jika BC:AF = 1:2, DE:EF = 1:1 dan D titik tengah AF, maka luas daerah berwarna putih adalah … cm².",
+      options:["12,5","15","18,75","25"], answer:0
+    },
+    {
+      id:9, topic:"Statistik",
+      text: "Data ukuran sepatu siswa SD Permata Bunda (35:5, 36:9, 37:17, 38:15, 39:21, 40:13, 41:9, 42:3). Nilai tengah (median) dari data tersebut adalah ….",
+      options:["38","39","39,5","40"], answer:1
+    },
+    {
+      id:10, topic:"Statistik",
+      text: "Toni mengikuti 5 kali tes, syarat: rata-rata minimal 85,5; selisih nilai terbesar dan terkecil paling sedikit 7. Toni sudah tes 4 kali dengan nilai 82, 83, 87 dan 85. Nilai tes kelima yang harus dicapai Toni paling sedikit adalah ….",
+      options:["89","90","91","92"], answer:0
+    },
+    {
+      id:11, topic:"Segi Delapan",
+      text: "Gambar berikut merupakan segi delapan beraturan. Besar sudut ACB (A dan B di dua sudut segi delapan, C di sudut lainnya) sama dengan … derajat.",
+      options:["22,5","30","45","67,5"], answer:2
+    },
+    {
+      id:12, topic:"Pangkat",
+      text: "Dua bilangan positif jumlahnya sama dengan 6, pangkat tiga bilangan pertama sama dengan pangkat enam bilangan kedua. Hasil kali kedua bilangan tersebut adalah ….",
+      options:["4","8","9","16"], answer:1
+    },
+    {
+      id:13, topic:"Deret",
+      text: "Hasil penjumlahan semua bilangan genap yang bukan kelipatan 3 dan kurang dari 201 adalah ….",
+      options:["6700","6734","6800","6868"], answer:3
+    },
+    {
+      id:14, topic:"Kombinatorika Warna",
+      text: "Pak Doni: segi lima diberi warna merah, kuning atau biru; segi empat diberi warna hijau atau ungu. Setiap bangun yang bersisian tidak boleh berwarna sama. Banyak susunan warna yang mungkin adalah ….",
+      options:["24","32","36","48"], answer:0
+    },
+    {
+      id:15, topic:"Keterbagian",
+      text: "Banyak bilangan ratusan yang dibentuk dari tiga angka berbeda dari 2, 3, 5 dan 6 serta habis dibagi 4 adalah ….",
+      options:["4","5","6","8"], answer:2
+    },
+    {
+      id:16, topic:"Luas Lahan",
+      text: "Pak Sutejo memiliki lahan perkebunan. Setengah lahannya ditanami kopi dan sepertiga ditanami coklat. Seperlima sisa lahan ditanami sayuran. Jika sisa lahan setelah ditanami kopi, coklat dan sayuran adalah 600 m², maka luas lahan Pak Sutejo yang ditanami coklat adalah … m².",
+      options:["1000","1200","1500","2000"], answer:3
+    },
+    {
+      id:17, topic:"Kalender",
+      text: "Yulia lahir pada hari Kamis bulan Juli tahun 2023. Ulang tahun Yulia ke-17 bertepatan pada hari ….",
+      options:["Senin","Selasa","Rabu","Kamis"], answer:1
+    },
+    {
+      id:18, topic:"Lingkaran",
+      text: "Dua lingkaran dengan titik pusat A (jari-jari 4 cm) dan B (jari-jari 3 cm). Titik T tengah ruas garis AB, jarak kedua pusat lingkaran 10 cm. Luas daerah yang diarsir (berbentuk belah ketupat) adalah … cm².",
+      options:["12","24","30","48"], answer:1
+    },
+    {
+      id:19, topic:"Segitiga",
+      text: "Diketahui segitiga ABC. Titik D dan E berturut-turut titik tengah AB dan BC, titik F dan G pada AC sehingga CF = FG = GA. Jika luas segitiga ABC = 12 cm², maka luas segiempat DEFG = … cm².",
+      options:["3","4","5","6"], answer:2
+    },
+    {
+      id:20, topic:"Bilangan Kuadrat",
+      text: "Suatu bilangan kuadrat sempurna, terdiri dari empat angka, dua angka pertama adalah sama, dan dua angka terakhir juga sama. Bilangan tersebut adalah ….",
+      options:["1122","3344","7744","8844"], answer:2
+    },
+    {
+      id:21, topic:"Persentase",
+      text: "Jumlah tabungan Fauzan, Afifah dan Annisa adalah Rp2.620.000. Tabungan Fauzan 125% dari tabungan Afifah dan tabungan Fauzan 90% dari tabungan Annisa. Perbandingan tabungan Afifah dan Annisa adalah ….",
+      options:["8:9","9:10","18:25","25:18"], answer:2
+    },
+    {
+      id:22, topic:"Kecepatan",
+      text: "Perahu kecil meninggalkan perahu besar ke arah utara dengan kecepatan 80 km/jam. Perahu besar bergerak ke arah timur dengan kecepatan 40 km/jam. Perahu kecil hanya punya bahan bakar cukup 4 jam. Jarak maksimum target yang dituju agar ia kembali ke perahu besar adalah ….",
+      options:["144 km","160 km","200 km","256 km"], answer:0
+    },
+    {
+      id:23, topic:"Grafik",
+      text: "Diagram menggambarkan hari kunjungan ke perpustakaan sekolah (Mela, Tita, Dikta, Ardi, Gina, Jimbo, Wati dengan garis sewarna = hari berkunjung sama). Selain Ardi, siswa-siswa yang pernah berkunjung bersama dengan setiap siswa yang lain adalah ….",
+      options:["Mela","Tita","Wati","Jimbo"], answer:2
+    },
+    {
+      id:24, topic:"Kombinatorika",
+      text: "Plat mobil terdiri dari 3 digit berbeda dipilih dari angka 1,2,3,4,6 dan 8, diikuti 2 huruf berbeda dipilih dari kata MOBILER. Jika nomor plat harus memuat angka 4, 8 dan M, maka banyak plat berbeda adalah ….",
+      options:["30","36","42","48"], answer:1
+    },
+    {
+      id:25, topic:"Kecepatan",
+      text: "Tim Petir: A(8), B(10), C(12), D(10), E(6), F(5) m/detik. Pilih 5 pelari untuk lintasan 5×80 m. Tim Kilat waktu terbaik 54 detik. Agar Tim Petir menang dengan selisih minimal 2 detik, banyak kombinasi 5 pelari yang dapat dibentuk adalah ….",
+      options:["4","5","6","8"], answer:2
+    }
+  ]
+},
+
+// ===================== EXAM 3: NASIONAL TEORI II =====================
+{
+  title: "Nasional – Teori II",
+  subtitle: "OSN Matematika SD – Tes Teori II (Uraian) 2024",
+  duration: 90,
+  type: "multiple",
+  questions: [
+    {
+      id:1, topic:"Perkalian Bilangan",
+      text: "Diberikan dua bilangan, bilangan pertama adalah bilangan ratusan 2a1 dan bilangan kedua adalah bilangan puluhan 3b. Jika hasil kali kedua bilangan tersebut habis dibagi 6, maka nilai terbesar dari hasil kalinya adalah ….",
+      options:["23.049","24.738","25.641","26.487"], answer:1
+    },
+    {
+      id:2, topic:"Volume",
+      text: "Dua balok A dan B memiliki tinggi 8 cm dan lebar 5 cm. Volume balok A yang panjangnya dibagi tiga bagian sama besar adalah 480 cm³. Balok B dipotong menjadi dua bagian menurut tingginya. Selisih volume antara 1 potongan dari balok A dan 1 potongan dari balok B adalah ….",
+      options:["0","40","80","160"], answer:0
+    },
+    {
+      id:3, topic:"Kecepatan & Waktu",
+      text: "Bus Merah berangkat dari kota X pukul 06:30 dan tiba di kota Y pukul 10:30. Bus Biru berangkat dari kota Y pukul 03:30 dan tiba di kota X pukul 09:30. Kedua bus bergerak dengan kecepatan tetap. Pada pukul berapa kedua bus berpapasan?",
+      options:["07:30","08:00","08:30","09:00"], answer:2
+    },
+    {
+      id:4, topic:"Kombinatorika",
+      text: "Tersedia tiga gelas kosong berwarna merah, hijau, dan biru yang masing-masing akan diisi kelereng. Jika tersedia empat kelereng dengan warna sama, maka banyak cara yang mungkin untuk mengisi ketiga gelas tersebut dengan semua kelereng yang tersedia adalah ….",
+      options:["10","12","15","18"], answer:2
+    },
+    {
+      id:5, topic:"Pola Bilangan",
+      text: "Bilangan asli tersusun berpola dalam tabel berkolom A–J. Berdasarkan pola tersebut, bilangan 2024 terletak di kolom ….",
+      options:["A","D","G","I"], answer:2
+    },
+    {
+      id:6, topic:"Luas Bangun",
+      text: "Pemilik rumah ingin memasang karpet A (Rp250.000/m²) untuk ruang utama, karpet B (Rp150.000/m²) untuk kamar tidur, dan rumput sintetis (Rp95.000/m²) untuk taman dan area jemur. Biaya yang harus dikeluarkan berdasarkan denah yang diberikan adalah ….",
+      options:["Rp8.500.000","Rp9.200.000","Rp10.100.000","Rp11.500.000"], answer:1
+    },
+    {
+      id:7, topic:"Statistik",
+      text: "Data penjualan beras Toko Sembako DIANING setahun (Jan:1386, Feb:1382, Mar:1387, Apr:1389, Mei:1392, Jun:1397, Jul:1392, Ags:1390, Sep:1392, Okt:1389, Nov:1383, Des:1388, Jan:1391). Penurunan penjualan terbesar terjadi pada bulan ….",
+      options:["Februari","Juli","Oktober","November"], answer:3
+    },
+    {
+      id:8, topic:"Keterbagian",
+      text: "Bilangan ribuan abcd yang setiap digitnya berbeda dibentuk dari bilangan 0,1,2,3,4,5,6,7,8. Jika abcd adalah kelipatan empat, maka banyak bilangan abcd yang mungkin adalah ….",
+      options:["360","504","630","756"], answer:1
+    },
+    {
+      id:9, topic:"Aljabar",
+      text: "Diketahui dua bilangan asli berbeda berjumlah 75. Apabila bilangan yang lebih besar dibagi yang lebih kecil, maka hasil baginya 8 dan sisanya 3. Selisih kedua bilangan tersebut adalah ….",
+      options:["57","59","61","63"], answer:3
+    },
+    {
+      id:10, topic:"Lompat Prima",
+      text: "Arif bermain 'lompat berjumlah prima' melewati 5 petak dari 1 ke 11 (jarak < 1 m). Banyak jalan yang dapat dilalui sesuai aturan adalah ….",
+      options:["4","6","8","10"], answer:1
+    },
+    {
+      id:11, topic:"Layang-layang",
+      text: "ABCD adalah layang-layang dengan AD = 5 cm, CD = 12 cm, ∠BAD = 134,8° dan ∠BCD = 45,2°. Panjang BD adalah ….",
+      options:["7 cm","8 cm","9 cm","13 cm"], answer:3
+    },
+    {
+      id:12, topic:"Kombinatorika",
+      text: "Andi dan Bani mengunjungi pusat perbelanjaan 4 lantai (alat tulis lt.1, sepatu lt.2, makanan lt.3, permainan lt.4). Ke lantai 2, 3, 4 bisa dengan lift, tangga berjalan, atau tangga biasa. Banyak kemungkinan rute dari lantai 1 kembali lagi ke lantai 1 adalah ….",
+      options:["54","81","243","729"], answer:1
+    },
+    {
+      id:13, topic:"Nilai & Statistik",
+      text: "Tiga finalis lomba bercerita, menulis, dan menggambar (Dani, Cheri, Yanto). Data: Bercerita(Dani:830,Cheri:750,Yanto:740), Menulis(D:850,C:840,Y:690), Menggambar(D:820,C:730,Y:645), Penonton(D:720,C:735,Y:725). Juara favorit (60% juri + 40% penonton tertinggi) adalah ….",
+      options:["Dani","Cheri","Yanto","Tidak ada pemenang"], answer:0
+    }
+  ]
+},
+
+// ===================== EXAM 4: NASIONAL EKSPLORASI =====================
+{
+  title: "Nasional – Eksplorasi",
+  subtitle: "OSN Matematika SD – Tes Eksplorasi 2024",
+  duration: 120,
+  type: "multiple",
+  questions: [
+    {
+      id:1, topic:"Menara Hanoi",
+      text: "Diberikan menara Hanoi dengan 4 kubus berurutan berat (dari bawah ke atas di tiang I): 5/6 kg, 70/8 ons, 751 g, dan 6/7 kg. Pindahkan dari tiang I ke tiang III dengan syarat susunan di tiang II dan III harus dari berat ke ringan (bawah ke atas). Banyak langkah minimal memindahkan susunan kubus dari tiang I ke tiang III adalah ….",
+      options:["7","9","11","15"], answer:3,
+      stimulus: `<svg class="stimulus-svg" viewBox="0 0 280 200" width="280" height="200" xmlns="http://www.w3.org/2000/svg">
+        <!-- Base -->
+        <rect x="10" y="170" width="260" height="20" rx="4" fill="#92400e"/>
+        <!-- Poles -->
+        <rect x="65" y="60" width="8" height="115" rx="2" fill="#a16207"/>
+        <rect x="135" y="60" width="8" height="115" rx="2" fill="#a16207"/>
+        <rect x="205" y="60" width="8" height="115" rx="2" fill="#a16207"/>
+        <!-- Cubes on pole I (left) - 4 cubes, from bottom -->
+        <rect x="30" y="130" width="80" height="28" rx="4" fill="#dc2626"/>
+        <text x="70" y="149" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">5/6 kg</text>
+        <rect x="36" y="102" width="67" height="25" rx="4" fill="#d97706"/>
+        <text x="70" y="119" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">70/8 ons</text>
+        <rect x="42" y="77" width="55" height="23" rx="4" fill="#b45309"/>
+        <text x="70" y="93" text-anchor="middle" font-size="9" fill="#fff" font-weight="bold">751 g</text>
+        <rect x="48" y="55" width="43" height="20" rx="4" fill="#92400e"/>
+        <text x="70" y="69" text-anchor="middle" font-size="8" fill="#fff" font-weight="bold">6/7 kg</text>
+        <!-- Pole labels -->
+        <text x="69" y="200" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">I</text>
+        <text x="139" y="200" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">II</text>
+        <text x="209" y="200" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">III</text>
+      </svg>`
+    },
+    {
+      id:2, topic:"Kombinatorika Bilangan",
+      text: "Diberikan 24 keping segitiga sama sisi bernomor 1–24. Susunlah dua segitiga (keping 20 dan 24 di tengah) sehingga a+b+c = 20 dan d+e+f = 24. D = a×b×c + d×e×f. Nilai D maksimum dengan 6 keping berbeda dari 24 keping (di luar 20 dan 24) yang mungkin adalah ….",
+      options:["560","588","672","720"], answer:2
+    },
+    {
+      id:3, topic:"Pewarnaan Kubus",
+      text: "Diberikan 27 kubus satuan berwarna kuning(9), merah(9), hijau(9). Disusun menjadi kubus 3×3×3 sehingga tidak ada dua kubus warna sama yang bersisian. Apakah susunan seperti itu mungkin dilakukan?",
+      options:["Ya, mungkin","Tidak mungkin","Mungkin hanya untuk 2 warna","Tergantung ukuran"], answer:0
+    },
+    {
+      id:4, topic:"Polimino",
+      text: "Dari papan 4×5 (20 kotak), warnai 10 kotak yang saling bersisian sehingga membentuk satu bangun datar dengan keliling maksimal. Keliling maksimal yang mungkin dicapai (dalam satuan sisi kotak) adalah ….",
+      options:["22","24","26","28"], answer:1
+    },
+    {
+      id:5, topic:"Penyusunan",
+      text: "Diberikan enam persegi panjang A(T:7,B:2,L:4,R:2), B(T:2,B:3,L:0,R:1), C(T:8,B:6,L:5,R:9), D(T:3,B:0,L:7,R:4), E(T:4,B:7,L:1,R:5), F(T:6,B:8,L:2,R:3). Untuk Posisi 1 (dua persegi panjang bersebelahan, sisi yang bersisian sama angkanya), banyak posisi yang mungkin adalah ….",
+      options:["2","3","4","5"], answer:2
+    },
+    {
+      id:6, topic:"Teka-teki Silang Bilangan",
+      text: "Diberikan teka-teki silang bilangan (dengan angka yg sudah ada: 6,9,6,0 pada baris mendatar). Mendatar: soal 3 = bilangan ribuan kelipatan 15 dengan angka-angkanya prima; soal 4 = bilangan palindrom kuadrat; soal 6 = bilangan palindrom kubik. Menurun: soal 1 = bilangan genap dengan tepat 2 faktor prima; soal 2 = bilangan ganjil kelipatan 9; soal 5 = bilangan habis dibagi 37 dan 73. Bilangan untuk soal mendatar no. 4 (palindrom kuadrat) adalah ….",
+      options:["121","484","676","1001"], answer:1
+    }
+  ]
+}
+
+];
+
+// ===================================================
+// STATE
+// ===================================================
+let currentExamIdx = -1;
+let currentQuestionIdx = 0;
+let userAnswers = [];
+let timerInterval = null;
+let remainingSeconds = 0;
+let userName = "";
+let userClass = "";
+let examStartTime = null;
+
+function selectExam(idx) {
+  currentExamIdx = idx;
+  document.querySelectorAll('.exam-card').forEach((c,i) => {
+    c.classList.toggle('selected', i === idx);
+  });
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goToInstruction() {
+  const name = document.getElementById('input-name').value.trim();
+  const cls = document.getElementById('input-class').value;
+  if (!name) { alert('Masukkan nama lengkap terlebih dahulu!'); return; }
+  if (!cls) { alert('Pilih kelas terlebih dahulu!'); return; }
+  if (currentExamIdx < 0) { alert('Pilih paket soal terlebih dahulu!'); return; }
+  userName = name;
+  userClass = cls;
+  const exam = EXAMS[currentExamIdx];
+  document.getElementById('instr-info').innerHTML = `
+    <div class="info-chip">📋 ${exam.questions.length} Soal</div>
+    <div class="info-chip">⏱ ${exam.duration} Menit</div>
+    <div class="info-chip">👤 Kelas ${userClass}</div>
+  `;
+  showScreen('screen-instruction');
+}
+
+function startExam() {
+  const exam = EXAMS[currentExamIdx];
+  userAnswers = new Array(exam.questions.length).fill(-1);
+  currentQuestionIdx = 0;
+  remainingSeconds = exam.duration * 60;
+  examStartTime = new Date();
+
+  document.getElementById('hdr-title').textContent = exam.title;
+  document.getElementById('hdr-sub').textContent = exam.subtitle;
+  document.getElementById('hdr-name').textContent = userName;
+  document.getElementById('hdr-name-box').style.display = 'block';
+
+  showScreen('screen-quiz');
+  buildNavDots();
+  renderQuestion();
+  startTimer();
+}
+
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    remainingSeconds--;
+    updateTimerDisplay();
+    if (remainingSeconds <= 0) {
+      clearInterval(timerInterval);
+      submitExam(true);
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(remainingSeconds / 60);
+  const s = remainingSeconds % 60;
+  const el = document.getElementById('timer-display');
+  el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.className = 'timer-value';
+  if (remainingSeconds <= 60) el.classList.add('danger');
+  else if (remainingSeconds <= 300) el.classList.add('warning');
+}
+
+function buildNavDots() {
+  const exam = EXAMS[currentExamIdx];
+  const container = document.getElementById('nav-dots');
+  container.innerHTML = '';
+  exam.questions.forEach((q, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot';
+    dot.id = `dot-${i}`;
+    dot.textContent = i + 1;
+    dot.onclick = () => goToQuestion(i);
+    container.appendChild(dot);
+  });
+  updateNavDots();
+}
+
+function updateNavDots() {
+  const exam = EXAMS[currentExamIdx];
+  exam.questions.forEach((q, i) => {
+    const dot = document.getElementById(`dot-${i}`);
+    if (!dot) return;
+    dot.className = 'nav-dot';
+    if (userAnswers[i] !== -1) dot.classList.add('answered');
+    if (i === currentQuestionIdx) dot.classList.add('active');
+  });
+  const answered = userAnswers.filter(a => a !== -1).length;
+  const total = exam.questions.length;
+  document.getElementById('progress-text').textContent = `${currentQuestionIdx+1} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${((currentQuestionIdx+1)/total)*100}%`;
+  document.getElementById('answered-text').textContent = `${answered} terjawab`;
+}
+
+function renderQuestion() {
+  const exam = EXAMS[currentExamIdx];
+  const q = exam.questions[currentQuestionIdx];
+  const card = document.getElementById('question-card');
+
+  let stimulusHTML = '';
+  if (q.stimulus) {
+    stimulusHTML = `<div style="margin-bottom:14px;">${q.stimulus}</div>`;
+  }
+
+  let optionsHTML = '';
+  const labels = ['A','B','C','D'];
+  q.options.forEach((opt, i) => {
+    const sel = userAnswers[currentQuestionIdx] === i ? 'selected' : '';
+    optionsHTML += `
+      <div class="option-item ${sel}" onclick="selectAnswer(${i})" id="opt-${i}">
+        <div class="option-letter">${labels[i]}</div>
+        <div>${opt}</div>
+      </div>`;
+  });
+
+  card.innerHTML = `
+    <div class="question-meta">
+      <div class="q-badge">Soal ${currentQuestionIdx+1}</div>
+      <div class="q-topic">${q.topic}</div>
+    </div>
+    <div class="question-text">${q.text.replace(/\n/g,'<br>')}</div>
+    ${stimulusHTML}
+    <div class="options-list">${optionsHTML}</div>
+  `;
+
+  document.getElementById('btn-prev').disabled = currentQuestionIdx === 0;
+  document.getElementById('btn-next').textContent = currentQuestionIdx === exam.questions.length-1 ? '✔ Selesai' : 'Next →';
+
+  updateNavDots();
+}
+
+function selectAnswer(idx) {
+  userAnswers[currentQuestionIdx] = idx;
+  document.querySelectorAll('.option-item').forEach((el, i) => {
+    el.classList.toggle('selected', i === idx);
+  });
+  updateNavDots();
+}
+
+function prevQuestion() {
+  if (currentQuestionIdx > 0) { currentQuestionIdx--; renderQuestion(); }
+}
+
+function nextQuestion() {
+  const exam = EXAMS[currentExamIdx];
+  if (currentQuestionIdx < exam.questions.length - 1) {
+    currentQuestionIdx++;
+    renderQuestion();
+  } else {
+    confirmSubmit();
+  }
+}
+
+function goToQuestion(idx) {
+  currentQuestionIdx = idx;
+  renderQuestion();
+}
+
+function confirmSubmit() {
+  const exam = EXAMS[currentExamIdx];
+  const unanswered = userAnswers.filter(a => a === -1).length;
+  const msg = unanswered > 0
+    ? `Masih ada <strong>${unanswered} soal</strong> yang belum dijawab.<br>Yakin ingin mengumpulkan?`
+    : `Semua soal sudah terjawab.<br>Yakin ingin mengumpulkan?`;
+  showModal(msg, () => submitExam(false));
+}
+
+function showModal(message, onConfirm) {
+  document.getElementById('modal-message').innerHTML = message;
+  document.getElementById('custom-modal').style.display = 'flex';
+  document.getElementById('modal-confirm').onclick = () => {
+    closeModal();
+    onConfirm();
+  };
+  document.getElementById('modal-cancel').onclick = closeModal;
+}
+
+function closeModal() {
+  document.getElementById('custom-modal').style.display = 'none';
+}
+
+function submitExam(autoSubmit) {
+  clearInterval(timerInterval);
+  const exam = EXAMS[currentExamIdx];
+  let correct = 0, wrong = 0, skip = 0;
+
+  exam.questions.forEach((q, i) => {
+    if (userAnswers[i] === -1) skip++;
+    else if (userAnswers[i] === q.answer) correct++;
+    else wrong++;
+  });
+
+  const total = exam.questions.length;
+  const score = Math.round((correct / total) * 100);
+
+  // Show result
+  document.getElementById('result-name').textContent = `${userName} – Kelas ${userClass}`;
+  document.getElementById('result-exam').textContent = exam.subtitle + (autoSubmit ? ' (Waktu Habis)' : '');
+  document.getElementById('score-number').textContent = score;
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-wrong').textContent = wrong;
+  document.getElementById('stat-skip').textContent = skip;
+
+  // Score circle color
+  const circle = document.getElementById('score-circle');
+  let color = score >= 80 ? '#10b981' : score >= 60 ? '#1a56db' : score >= 40 ? '#f59e0b' : '#ef4444';
+  circle.style.background = `conic-gradient(${color} ${score*3.6}deg, #e2e8f0 0deg)`;
+  document.getElementById('score-number').style.color = color;
+
+  // Feedback
+  const fb = document.getElementById('feedback-box');
+  const ft = document.getElementById('feedback-title');
+  const ftxt = document.getElementById('feedback-text');
+  if (score >= 85) {
+    fb.className = 'feedback-box excellent';
+    ft.textContent = '🏆 Luar Biasa! Sangat Baik!';
+    ftxt.textContent = `Kamu berhasil menjawab ${correct} dari ${total} soal dengan benar! Prestasimu sangat membanggakan. Terus pertahankan dan tingkatkan kemampuanmu!`;
+  } else if (score >= 70) {
+    fb.className = 'feedback-box good';
+    ft.textContent = '👍 Bagus! Di Atas Rata-rata!';
+    ftxt.textContent = `Kamu menjawab ${correct} dari ${total} soal dengan benar. Hasil yang bagus! Pelajari kembali soal-soal yang masih salah untuk meningkatkan nilai.`;
+  } else if (score >= 50) {
+    fb.className = 'feedback-box average';
+    ft.textContent = '📚 Cukup, Masih Perlu Belajar!';
+    ftxt.textContent = `Kamu menjawab ${correct} dari ${total} soal dengan benar. Kamu sudah berusaha! Pelajari kembali materi dan latihan lebih banyak soal ya.`;
+  } else {
+    fb.className = 'feedback-box poor';
+    ft.textContent = '💪 Semangat, Jangan Menyerah!';
+    ftxt.textContent = `Kamu menjawab ${correct} dari ${total} soal dengan benar. Jangan berkecil hati! Pelajari kembali materi dari awal dan rajin berlatih soal-soal OSN.`;
+  }
+
+  // Review
+  const reviewList = document.getElementById('review-list');
+  reviewList.innerHTML = '';
+  exam.questions.forEach((q, i) => {
+    const ua = userAnswers[i];
+    let cls, status, userAns, correctAns;
+    const labels = ['A','B','C','D'];
+    correctAns = `${labels[q.answer]}. ${q.options[q.answer]}`;
+    if (ua === -1) {
+      cls = 'skip-review'; status = '⬜ Tidak dijawab';
+      userAns = 'Tidak dijawab';
+    } else if (ua === q.answer) {
+      cls = 'correct-review'; status = '✅ Benar';
+      userAns = `${labels[ua]}. ${q.options[ua]}`;
+    } else {
+      cls = 'wrong-review'; status = '❌ Salah';
+      userAns = `${labels[ua]}. ${q.options[ua]}`;
+    }
+
+    const item = document.createElement('div');
+    item.className = `review-item ${cls}`;
+    item.innerHTML = `
+      <div class="review-q">${status} – Soal ${i+1}: ${q.text.substring(0,80)}${q.text.length>80?'…':''}</div>
+      <div class="review-ans">
+        Jawaban kamu: <span class="${ua === q.answer ? 'review-correct-ans' : (ua===-1?'':'review-wrong-ans')}">${userAns}</span><br>
+        <span class="review-correct-ans">Kunci: ${correctAns}</span>
+      </div>
+    `;
+    reviewList.appendChild(item);
+  });
+
+  showScreen('screen-result');
+}
+
+function restartExam() {
+  showScreen('screen-welcome');
+  // reset
+  currentExamIdx = -1;
+  document.querySelectorAll('.exam-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('input-name').value = '';
+  document.getElementById('input-class').value = '';
+}
+
+// Initial state
+document.addEventListener('DOMContentLoaded', () => {
+  showScreen('screen-welcome');
+});
+</script>
+</body>
+</html>
